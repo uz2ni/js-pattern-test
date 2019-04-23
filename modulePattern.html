@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script>
+      // 함수 정의 후 호출 -> 여러 개의 인스턴스 객체 생성해서 사용 가능
+      // 익명함수 일 경우 -> 싱글톤 패턴처럼 1개의 인스턴스만 사용 가능
+      var Module = function (){
+        /* 모듈 패턴을 구현한 클로저 코드 */
+        // 은닉될 멤버 정의
+        var privateKey = 0;
+        function privateMethod() {
+          return ++privateKey;
+        }
+        // 공개될 멤버(특권 메소드) 정의
+        return { // 모듈 패턴은 반환값이 함수가 아니라 객체이다.
+          publicKey: privateKey,
+          publicMethod: function() {
+            return privateMethod();
+          }
+        }
+      };
+      // 위 코드 실행 시 익명함수 자동 호출 후 반환 객체가 module 변수에 할당된다.
+
+      var obj1 = Module();
+      console.log(obj1.publicMethod());
+      console.log(obj1.publicMethod());
+      var obj2 = Module();
+      console.log(obj2.publicMethod());
+      console.log(obj2.publicMethod());
+      console.log(obj2.publicMethod());
+
+      var m = {};
+      m.md = {'md':'1'};
+      m.md2 = {'md2':'2'};
+      m.md.lib = (function() {
+        // 비공개
+        var pri = 0;
+        function priMethod() {
+          return ++pri;
+        }
+
+        return { // 공개
+          pub: pri,
+          pubMethod: function() {
+            return priMethod();
+          }
+        }
+
+      })();
+
+      console.log(m);
+      console.log(m.md);
+      console.log(m.md2);
+
+    </script>
+  </body>
+</html>
